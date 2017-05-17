@@ -85,6 +85,7 @@ public class MainWindow extends JFrame {
 	  			if((event.getX()>200 && event.getY()>100)){
 	  				for(int i=0; i<3; i++){
 	  					for(int j=0; j<3; j++){
+	  						tile = LB.getTile(i, j); // TODO: make Tile class or board state 
 	  						if((event.getX() > tile.getX()) && (event.getX() < tile.getX()+40) && (event.getY() > tile.getY()) && (event.getY() < tile.getY()+40)){
 	  							
 	  							
