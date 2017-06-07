@@ -1,18 +1,40 @@
 package connectfour;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import minmax.Board;
+import minmax.Move;
 
 public class ConnectFourBoard implements Board{
 
-	private int board[][] = new int[7][6];
+	private int board[][];
 	private int player;
+
+	private int checkMovesAhead;
+	
+	private final static int BOARD_SIZE_X = 7;
+	private final static int BOARD_SIZE_Y = 6;
+	
+	public ConnectFourBoard(){
+		board = new int[7][6];
+	}
 	
 	public ConnectFourBoard(int[][] board, int player){
 		this.board = board;
 		this.player = player;
 	}
-		
-	public int scoreBoard(){
+	
+	public ConnectFourBoard(int[][] board, int player, int checkMovesAhead){
+		this.board = board;
+		this.player = player;
+		this.checkMovesAhead = checkMovesAhead;
+	}
+	
+	
+	
+	@Override
+	public int evaluateBoard(){
 		int elem1=0,elem2=0,elem3=0,elem4=0;
 		int score = 0;
 		int result = 0;
@@ -74,15 +96,54 @@ public class ConnectFourBoard implements Board{
         }
 		
 	}
-	
+
+	@Override
 	public boolean isGameFinished()
     {
-
-        int x=scoreBoard();
+        int x=evaluateBoard();
         if (x == 10000 || x == -10000)
         {
             return true;          
         }
         return false;
     }
+	
+	@Override
+	public List<Move> generateMoves() {
+		if(isGameFinished() || checkMovesAhead < 1){	//TODO consider moving it into different place - somewhere earlier
+			return null;
+		}
+		List<Move> moveList = new ArrayList<Move>();
+		for(int column = 0; column < BOARD_SIZE_X; column++){
+			if(isMoveDoable(column)){
+				moveList.add(new ConnectFourMove(switchPlayer(), column));
+			}
+		}
+		return moveList;
+	}
+
+	@Override
+	public Board makeMove(Move move) {
+		return makeMove((ConnectFourMove)move);
+	}
+
+	private Board makeMove(ConnectFourMove move){
+		int newBoard[][] = board;
+		
+		isMoveDoable(move.getMove());
+		
+		
+		
+		return new ConnectFourBoard(newBoard, 0); // TODO
+	}
+
+	private boolean isMoveDoable(int column){
+		if(board[column][BOARD_SIZE_Y - 1]!=0) return false;
+		else return true;
+		
+	}
+	
+	private int switchPlayer(){
+		return (player == 1) ? -1 : 1;
+	}
 }
