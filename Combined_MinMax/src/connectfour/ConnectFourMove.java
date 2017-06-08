@@ -6,10 +6,12 @@ public class ConnectFourMove implements Move {
 
 	private int player;
 	private int move;
+	private int depth;
 
-	public ConnectFourMove(int player, int move) {
+	public ConnectFourMove(int player, int move, int depth) {
 		this.player = player;
 		this.move = move;
+		this.depth = depth;
 	}
 
 	public int getMove() {
@@ -18,6 +20,10 @@ public class ConnectFourMove implements Move {
 
 	public int getPlayer() {
 		return player;
+	}
+	
+	public int getDepth(){
+		return depth;
 	}
 
 }

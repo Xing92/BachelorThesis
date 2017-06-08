@@ -11,5 +11,7 @@ public interface Board {
 	public Board makeMove(Move move);
 	
 	public List<Move> generateMoves();
+	
+	public void printBoard();
 
 }

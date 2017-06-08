@@ -1,22 +1,23 @@
 package minmax;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Node {
-	private Board state;
+	private Board board;
 	private Node parent;
-	private ArrayList<Node> children;
+	private List<Node> children = new ArrayList<Node>();;
 	private boolean isRootNode = false;
 	
 	private int value;
 
-	public Node(Board state, Node parent) {
-		this.state = state;
+	public Node(Board board, Node parent) {
+		this.board = board;
 		this.parent = parent;
 	}
 	
-	public Node(Board state) {
-		this.state = state;
+	public Node(Board board) {
+		this.board = board;
 		this.isRootNode = true;
 	}
 	
@@ -30,6 +31,14 @@ public class Node {
 	
 	public int getValue(){
 		return value;
+	}
+	
+	public void printBoard(){
+		board.printBoard();
+	}
+	
+	public Board getBoard(){
+		return board;
 	}
 	
 }

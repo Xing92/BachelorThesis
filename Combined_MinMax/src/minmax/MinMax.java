@@ -1,8 +1,11 @@
 package minmax;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MinMax {
 
-	private Node node;
+	private Node rootNode;
 	
 	public MinMax(){
 		
@@ -10,9 +13,31 @@ public class MinMax {
 	
 	public void start(Board board){
 		board.evaluateBoard();
-		node = new Node(board);
-		board.generateMoves();
+		rootNode = new Node(board);
+		populateNodes(rootNode);
+	}
+	
+	private List<Node> populateNodes(Node rootNode){
+
+		Board rootBoard = rootNode.getBoard();
+		List<Board> listOfBoards = new ArrayList<Board>();
+		List<Node> listOfNodes = new ArrayList<Node>();
+
+		List<Move> listOfMoves = rootBoard.generateMoves();
+		for(Move move : listOfMoves){
+			Board board = rootBoard.makeMove(move);
+			listOfBoards.add(board);
+			Node node = new Node(board, rootNode);
+			rootNode.addChild(node);
+			listOfNodes.add(node);
+			
+			populateNodes(node);
+		}
 		
+		for(Board board : listOfBoards){
+			board.printBoard();
+		}
 		
+		return listOfNodes;
 	}
 }
