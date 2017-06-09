@@ -41,4 +41,8 @@ public class Node {
 		return board;
 	}
 	
+	public List<Node> getChildren(){
+		return children;
+	}
+	
 }

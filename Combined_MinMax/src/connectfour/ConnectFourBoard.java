@@ -142,7 +142,7 @@ public class ConnectFourBoard implements Board {
 	private Board makeMove(ConnectFourMove move) {
 		int newBoard[][] = copyBoardValues(board);
 		int column = move.getMove();
-		System.out.println(selfIterationCounter + ": " + column);
+//		System.out.println(selfIterationCounter + ": " + column);
 		if (isMoveDoable(column)) {
 			newBoard[column][getRowFromColumn(column)] = player;
 		}

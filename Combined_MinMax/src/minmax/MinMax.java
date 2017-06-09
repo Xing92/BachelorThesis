@@ -11,10 +11,11 @@ public class MinMax {
 		
 	}
 	
-	public void start(Board board){
+	public Node start(Board board){
 		board.evaluateBoard();
 		rootNode = new Node(board);
 		populateNodes(rootNode);
+		return rootNode;
 	}
 	
 	private List<Node> populateNodes(Node rootNode){
@@ -34,9 +35,9 @@ public class MinMax {
 			populateNodes(node);
 		}
 		
-		for(Board board : listOfBoards){
-			board.printBoard();
-		}
+//		for(Board board : listOfBoards){
+//			board.printBoard();
+//		}
 		
 		return listOfNodes;
 	}
