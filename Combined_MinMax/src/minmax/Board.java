@@ -14,4 +14,8 @@ public interface Board {
 	
 	public void printBoard();
 
+	public int[][] getBoard();
+	
+	public int getPlayer();
+
 }

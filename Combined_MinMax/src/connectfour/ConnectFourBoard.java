@@ -21,6 +21,15 @@ public class ConnectFourBoard implements Board {
 
 	public ConnectFourBoard() {
 		board = new int[BOARD_SIZE_X][BOARD_SIZE_Y];
+		player = 1;
+	}
+	
+	public int getPlayer(){
+		return player;
+	}
+	
+	public int[][] getBoard(){
+		return board;
 	}
 
 	public ConnectFourBoard(int[][] board, int player) {
@@ -142,14 +151,15 @@ public class ConnectFourBoard implements Board {
 	private Board makeMove(ConnectFourMove move) {
 		int newBoard[][] = copyBoardValues(board);
 		int column = move.getMove();
+		int newPlayer = player;
 //		System.out.println(selfIterationCounter + ": " + column);
 		if (isMoveDoable(column)) {
 			newBoard[column][getRowFromColumn(column)] = player;
+			newPlayer = switchPlayer();
 		}
 
-		int newPlayer = switchPlayer();
 		return new ConnectFourBoard(newBoard, newPlayer, move.getDepth()) {
-		}; // TODO
+		};
 	}
 
 	private boolean isMoveDoable(int column) {
