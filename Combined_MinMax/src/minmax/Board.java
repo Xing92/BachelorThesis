@@ -6,6 +6,8 @@ public interface Board {
 		
 	public int evaluateBoard();
 	
+	public int evaluateBoard(int player);
+	
 	public boolean isGameFinished();
 	
 	public Board makeMove(Move move);
@@ -17,5 +19,7 @@ public interface Board {
 	public int[][] getBoard();
 	
 	public int getPlayer();
+	
+	public Board getBoardCopy();
 
 }

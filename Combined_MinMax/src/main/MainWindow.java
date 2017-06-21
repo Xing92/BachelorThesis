@@ -1,22 +1,19 @@
 package main;
 
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Scanner;
 
-import javax.xml.ws.Dispatch;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 import connectfour.ConnectFourBoard;
-import connectfour.ConnectFourDrawBoard;
 import connectfour.ConnectFourMainWindow;
 import minmax.Board;
 import minmax.MinMax;
 import minmax.Node;
-
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import tictactoe.TicTacToeMainWindow;
 
 public class MainWindow {
 
@@ -66,7 +63,8 @@ public class MainWindow {
 		JButton btnTicTacToe = new JButton("Tic Tac Toe");
 		btnTicTacToe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: start ticatactoe
+				TicTacToeMainWindow tttmw = new TicTacToeMainWindow();
+				tttmw.frame.setVisible(true);
 			}
 		});
 		btnTicTacToe.setBounds(10, 82, 144, 60);

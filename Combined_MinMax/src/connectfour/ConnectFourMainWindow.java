@@ -1,14 +1,13 @@
 package connectfour;
 
-import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
@@ -16,10 +15,8 @@ import minmax.Board;
 import minmax.MinMax;
 import minmax.Move;
 import minmax.Node;
+import minmax.ValueMove;
 import resources.ImageContainer;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class ConnectFourMainWindow extends JFrame {
 
@@ -27,7 +24,8 @@ public class ConnectFourMainWindow extends JFrame {
 	private Board board;
 	private static ImageContainer IC = new ImageContainer();
 	private JSpinner spinner;
-	private JButton button_1, button_2,  button_3,  button_4,  button_5,  button_6,  button_7;
+	private JButton button_1, button_2, button_3, button_4, button_5, button_6, button_7;
+	private int b1, b2, b3, b4, b5, b6, b7;
 	boolean useAi = true;
 	private MinMax minMax;
 
@@ -47,23 +45,23 @@ public class ConnectFourMainWindow extends JFrame {
 		frame = new JFrame() {
 			public void paint(Graphics g) {
 				super.paint(g);
-				System.out.println("Try repaint"); // TODO: delete this
 				Graphics2D g2d = (Graphics2D) g;
 
 				for (int i = 0; i < 7; i++) {
 					for (int j = 0; j < 6; j++) {
 						if (board.getBoard()[i][j] == 0) {
-							g2d.drawImage(IC.getBlank(), 155 + 80 * i, 160 + 80 * j, this);
+							g2d.drawImage(IC.getBlank(), 155 + 80 * i, 560 - 80 * j, this);
 						} else if (board.getBoard()[i][j] == 1) {
-							g2d.drawImage(IC.getCross(), 155 + 80 * i, 160 + 80 * j, this);
+							g2d.drawImage(IC.getCross(), 155 + 80 * i, 560 - 80 * j, this);
 						} else if (board.getBoard()[i][j] == -1) {
-							g2d.drawImage(IC.getCircle(), 155 + 80 * i, 160 + 80 * j, this);
+							g2d.drawImage(IC.getCircle(), 155 + 80 * i, 560 - 80 * j, this);
 						}
 					}
 				}
 			}
 		};
 		frame.setTitle("Connect Four - PC");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 800, 800);
 		frame.getContentPane().setLayout(null);
 
@@ -171,16 +169,37 @@ public class ConnectFourMainWindow extends JFrame {
 		Move move = new ConnectFourMove(board.getPlayer(), intMove, (Integer) spinner.getValue());
 		board = board.makeMove(move);
 		frame.repaint();
+		board.isGameFinished();
 		if (useAi) {
 			minMax = new MinMax();
-			Node node = new Node(board);
-			int value = minMax.minMax(node, move.getDepth(), board.getPlayer(), true);
-			Move responseMove = node.getBestMove();
-			board = board.makeMove(responseMove);
-			
-//			minMax.start(board);
-			frame.repaint();
-			System.out.println("Done minmax. Best value: " + value);
+			Node rootNode = minMax.generateTree(board, (Integer) spinner.getValue(), board.getPlayer());
+			minMax.minMax(rootNode, (Integer) spinner.getValue());
+			rootNode.printValues();
+
+			// Node node = new Node(board);
+			// ValueMove vm = minMax.minMax(board, move.getDepth());
+			// System.out.println("Val: " + vm.getValue() + " Move: " +
+			// vm.getMove().getMove());
+			// Node result = minMax.generateTree(node, move.getDepth(), true);
+			// System.out.println("Value: " + result.getValue() + ", Move: " +
+			// result.getBestMove().getMove());
+
+			// minMax = new MinMax();
+			// Node node = new Node(board);
+			//// int value = minMax.minMax(node, move.getDepth(),
+			// board.getPlayer(), true);
+			// ValueMove valueMove = minMax.alphaBeta(node, move.getDepth(),
+			// board.getPlayer(), true, -10_000, 10_000);
+			// Move responseMove = node.getBestMove();
+			// board = board.makeMove(responseMove);
+			//// node.printAllNodes();
+			// node.printValues();
+			//
+			//// minMax.start(board);
+			// frame.repaint();
+			// System.out.println("Done minmax. Best value: " +
+			// valueMove.getValue());
+			// board.isGameFinished();
 		}
 	}
 

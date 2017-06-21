@@ -55,13 +55,19 @@ public class Node {
 		}
 	}
 
-	public Move getBestMove() {
+	public void printValues() {
+		for (Node child : children) {
+			System.out.println("Node value: " + child.getValue());
+		}
+	}
 
+	public Move getBestMove() {
+		if(children.isEmpty()) return null;
 		Node bestNode = children.get(0);
 		Move bestMove = bestNode.getMove();
-		
-		for(Node node : children){
-			if(node.getValue() > bestNode.getValue()){
+
+		for (Node node : children) {
+			if (node.getValue() > bestNode.getValue()) {
 				bestNode = node;
 				bestMove = bestNode.getMove();
 			}
