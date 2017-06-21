@@ -62,7 +62,7 @@ public class TicTacToeMainWindow {
 			}
 		};
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Connect Four - PC");
+		frame.setTitle("Tic-Tac-Toe - PC");
 		frame.setBounds(100, 100, 500, 700);
 		frame.getContentPane().setLayout(null);
 
@@ -148,7 +148,7 @@ public class TicTacToeMainWindow {
 		frame.getContentPane().add(button_9);
 
 		spinner = new JSpinner();
-		spinner.setBounds(10, 356, 45, 22);
+		spinner.setBounds(20, 356, 55, 22);
 		spinner.setModel(new SpinnerNumberModel(5, 1, 11, 2));
 		frame.getContentPane().add(spinner);
 
@@ -160,7 +160,7 @@ public class TicTacToeMainWindow {
 				enableButtons();
 			}
 		});
-		btnNewGame.setBounds(20, 389, 89, 23);
+		btnNewGame.setBounds(20, 389, 110, 23);
 		frame.getContentPane().add(btnNewGame);
 
 		JButton btnUseAi = new JButton("Use AI");
@@ -171,7 +171,7 @@ public class TicTacToeMainWindow {
 				JOptionPane.showMessageDialog(null, "Computer switched to: " + useAi);
 			}
 		});
-		btnUseAi.setBounds(20, 423, 89, 23);
+		btnUseAi.setBounds(20, 423, 110, 23);
 		frame.getContentPane().add(btnUseAi);
 
 		JButton btnExit = new JButton("Exit");
@@ -181,7 +181,7 @@ public class TicTacToeMainWindow {
 				frame.dispose();
 			}
 		});
-		btnExit.setBounds(20, 458, 89, 23);
+		btnExit.setBounds(20, 458, 110, 23);
 		frame.getContentPane().add(btnExit);
 	}
 
@@ -197,7 +197,7 @@ public class TicTacToeMainWindow {
 			if(newNode.getBestMove() != null){
 				System.out.println("Best: " + newNode.getBestMove().getMove());
 				Move newMove = new TicTacToeMove(board.getPlayer(), newNode.getBestMove().getMove(), (Integer) spinner.getValue());
-				board = board.makeMove(newMove);
+//				board = board.makeMove(newMove);
 				frame.repaint();
 				checkFinish();
 			}

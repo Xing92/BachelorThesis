@@ -32,8 +32,10 @@ public class TicTacToeBoard implements Board {
 
 	@Override
 	public int evaluateBoard(int player) {
-		if (checkWin(player)) return 10;
-		else if(checkWin(switchPlayer())) return -10;
+		if (checkWin(player))
+			return 10;
+		else if (checkWin(switchPlayer()))
+			return -10;
 		return 0;
 	}
 
@@ -131,7 +133,7 @@ public class TicTacToeBoard implements Board {
 		for (int column = 0; column < BOARD_SIZE; column++) {
 			for (int row = 0; row < BOARD_SIZE; row++) {
 				Move move = new TicTacToeMove(player, column * 3 + row);
-				if (isMoveDoable(move)){
+				if (isMoveDoable(move)) {
 					moveList.add(move);
 				}
 			}
@@ -151,8 +153,7 @@ public class TicTacToeBoard implements Board {
 
 	@Override
 	public int getPlayer() {
-		// TODO Auto-generated method stub
-		return 0;
+		return player;
 	}
 
 	@Override
