@@ -149,7 +149,7 @@ public class TicTacToeMainWindow {
 
 		spinner = new JSpinner();
 		spinner.setBounds(20, 356, 55, 22);
-		spinner.setModel(new SpinnerNumberModel(5, 1, 11, 2));
+		spinner.setModel(new SpinnerNumberModel(9, 1, 11, 1));
 		frame.getContentPane().add(spinner);
 
 		JButton btnNewGame = new JButton("New Game");
@@ -192,21 +192,14 @@ public class TicTacToeMainWindow {
 		checkFinish();
 		if(useAi){
 			MinMax minmax = new MinMax();
-			Node newNode = minmax.generateTree(board, (Integer) spinner.getValue(), board.getPlayer());
-//			newNode.printValues();
+			Node newNode = minmax.startMinMax(board, (Integer) spinner.getValue(), board.getPlayer());
 			if(newNode.getBestMove() != null){
-				System.out.println("Best: " + newNode.getBestMove().getMove());
 				Move newMove = new TicTacToeMove(board.getPlayer(), newNode.getBestMove().getMove(), (Integer) spinner.getValue());
-//				board = board.makeMove(newMove);
+				board = board.makeMove(newMove);
 				frame.repaint();
 				checkFinish();
 			}
-			
-//			Move newMove = newNode.getBestMove();
-//			System.out.println("Best move: " + newMove.getMove());
-//			board.generateMoves();
 		}
-
 	}
 	
 	private void checkFinish(){
@@ -221,7 +214,6 @@ public class TicTacToeMainWindow {
 		else if (board.isGameFinished()) {
 			disableButtons();
 			JOptionPane.showMessageDialog(null, "Nobody wins");
-			System.out.println("FINISHED");
 		}
 	}
 	

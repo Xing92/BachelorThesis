@@ -87,7 +87,7 @@ public class MainWindow {
 		MinMax mm = new MinMax();
 		Board board = new ConnectFourBoard(b, 1, 7);
 		System.out.println("Generating...");
-		Node node = mm.start(board);
+		Node node = mm.startMinMax(board, 7, 1);
 		// Node node = new Node(board);
 
 		System.out.println("Done");

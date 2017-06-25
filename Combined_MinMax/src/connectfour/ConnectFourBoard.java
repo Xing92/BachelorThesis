@@ -117,8 +117,8 @@ public class ConnectFourBoard implements Board {
 															// scoreThrees(switchPlayer());
 		if (scoreFours(player) > 0) {
 			score = 10_000_000;
-		} else if (scoreFours(switchPlayer()) > 0) {
-			printBoard();
+		} else if (scoreFours(switchPlayer(player)) > 0) {
+//			printBoard();
 			score = -10_000_000;
 		}
 		return score;
@@ -131,17 +131,17 @@ public class ConnectFourBoard implements Board {
 	            for (int j = 0; j <BOARD_SIZE_Y; j++)
 	                if (board[i][j] == player)
 	                	score += evaluationTable[i][j];
-	                else if (board[i][j] == switchPlayer())
+	                else if (board[i][j] == switchPlayer(player))
 	                	score -= evaluationTable[i][j];
 		return score;
 	}
 	
 	public int evaluateBoard(int player) {
-		int score = scoreTwos(player) + scoreThrees(player) - scoreTwos(switchPlayer()) - scoreThrees(switchPlayer()) + scoreOnes(player);
+		int score = scoreTwos(player) + scoreThrees(player) - scoreTwos(switchPlayer(player)) - scoreThrees(switchPlayer(player)) + scoreOnes(player);
 		if (scoreFours(player) > 0) {
 			score = 10_000_000;
-		} else if (scoreFours(switchPlayer()) > 0) {
-			printBoard();
+		} else if (scoreFours(switchPlayer(player)) > 0) {
+//			printBoard();
 			score = -10_000_000;
 		}
 		if (player == this.player) {
@@ -245,7 +245,7 @@ public class ConnectFourBoard implements Board {
 		List<Move> moveList = new ArrayList<Move>();
 		for (int column = 0; column < BOARD_SIZE_X; column++) {
 			if (isMoveDoable(column)) {
-				moveList.add(new ConnectFourMove(switchPlayer(), column));
+				moveList.add(new ConnectFourMove(switchPlayer(player), column));
 			}
 		}
 		return moveList;
@@ -275,7 +275,7 @@ public class ConnectFourBoard implements Board {
 		// System.out.println(selfIterationCounter + ": " + column);
 		if (isMoveDoable(column)) {
 			newBoard[column][getRowFromColumn(column)] = player;
-			newPlayer = switchPlayer();
+			newPlayer = switchPlayer(player);
 		}
 
 		return new ConnectFourBoard(newBoard, newPlayer, move.getDepth());
@@ -289,7 +289,7 @@ public class ConnectFourBoard implements Board {
 
 	}
 
-	private int switchPlayer() {
+	private int switchPlayer(int player) {
 		return (player == 1) ? -1 : 1;
 	}
 

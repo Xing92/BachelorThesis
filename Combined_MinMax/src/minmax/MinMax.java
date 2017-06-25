@@ -1,45 +1,27 @@
 package minmax;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MinMax {
 
-	private Node rootNode;
+	public Node startMinMax(Board board, int depth, int player) {
+		long start_time = System.nanoTime();
 
-	public MinMax() {
+		Node node = generateTree(board, depth, player);
+		
+		long mid_time = System.nanoTime();
+		
+		minMax(node);
 
-	}
+		long end_time = System.nanoTime();
+		double difference1 = (mid_time - start_time) / 1e6;
+		double difference2 = (end_time - mid_time) / 1e6;
+		double difference3 = (end_time - start_time) / 1e6;
+		System.out.println("Generate time: " + difference1 + " ms");
+		System.out.println("MinMax   time: " + difference2 + " ms");
+		System.out.println("Depth: " + depth + " - " + difference3 + " ms");
 
-	public Node start(Board board) {
-		board.evaluateBoard();
-		rootNode = new Node(board);
-		populateNodes(rootNode);
-		return rootNode;
-	}
-
-	private List<Node> populateNodes(Node rootNode) {
-
-		Board rootBoard = rootNode.getBoard();
-		List<Board> listOfBoards = new ArrayList<Board>();
-		List<Node> listOfNodes = new ArrayList<Node>();
-
-		List<Move> listOfMoves = rootBoard.generateMoves();
-		for (Move move : listOfMoves) {
-			Board board = rootBoard.makeMove(move);
-			listOfBoards.add(board);
-			Node node = new Node(board, move, rootNode);
-			rootNode.addChild(node);
-			listOfNodes.add(node);
-
-			populateNodes(node);
-		}
-
-		// for(Board board : listOfBoards){
-		// board.printBoard();
-		// }
-
-		return listOfNodes;
+		return node;
 	}
 
 	// public ValueMove minMax(Board board, int depth) {
@@ -88,41 +70,39 @@ public class MinMax {
 	// return bestVM;
 	// }
 
-	public Node generateTree(Board board, int depth, int player) {
+	private Node generateTree(Board board, int depth, int player) {
 		Node rootNode = new Node(board);
 		generateSubtree(rootNode, depth, player);
-		minMax(rootNode, depth);
 		return rootNode;
 	}
 
 	private void generateSubtree(Node subRootNode, int depth, int player) {
 		Board board = subRootNode.getBoard();
 
-		if (depth == 0) {
+		if (depth == 0 || board.isGameFinished()) {
 			subRootNode.setValue(board.evaluateBoard(player));
-//			System.out.println("Reached bottom. Value: " + subRootNode.getValue());
 			return;
 		}
 		List<Move> moveList = board.generateMoves();
 		for (Move move : moveList) {
 			Board tempBoard = board.makeMove(move);
 			Node tempNode = new Node(tempBoard, move, subRootNode);
-			subRootNode.addChild(tempNode);
 			generateSubtree(tempNode, depth - 1, player);
 		}
 	}
 
-	public void minMax(Node rootNode, int depth) {
-		maxMove(rootNode, depth);
+	private void minMax(Node node) {
+//		maxMove(node);
+		alphaBeta(node, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
 	}
 
-	public int maxMove(Node node, int depth) {
-		if (depth == 0) {
+	private int maxMove(Node node) {
+		if (node.getChildren().isEmpty()) {
 			return node.getValue();
 		}
 		int bestValue = Integer.MIN_VALUE;
 		for (Node childNode : node.getChildren()) {
-			int tempValue = minMove(childNode, depth - 1);
+			int tempValue = minMove(childNode);
 			childNode.setValue(tempValue);
 			if (tempValue > bestValue) {
 				bestValue = tempValue;
@@ -131,19 +111,47 @@ public class MinMax {
 		return bestValue;
 	}
 
-	public int minMove(Node node, int depth) {
-		if (depth == 0) {
+	private int minMove(Node node) {
+		if (node.getChildren().isEmpty()) {
 			return node.getValue();
 		}
 		int bestValue = Integer.MAX_VALUE;
 		for (Node childNode : node.getChildren()) {
-			int tempValue = maxMove(childNode, depth - 1);
+			int tempValue = maxMove(childNode);
 			childNode.setValue(tempValue);
 			if (tempValue < bestValue) {
 				bestValue = tempValue;
 			}
 		}
 		return bestValue;
+	}
+
+	private int alphaBeta(Node node, int alpha, int beta, boolean maximizing) {
+		if (node.getChildren().isEmpty()) {
+			return node.getValue();
+		}
+		if (maximizing) {
+			for (Node childNode : node.getChildren()) {
+				int tempVal = alphaBeta(childNode, alpha, beta, !maximizing);
+				alpha = (tempVal > alpha ? tempVal : alpha);
+				childNode.setValue(alpha);
+				if (alpha >= beta) {
+					System.out.println("CUT!==========================" + alpha);
+					return alpha;
+				}
+			}
+			return alpha;
+		} else {
+			for (Node childNode : node.getChildren()) {
+				int tempVal = alphaBeta(childNode, alpha, beta, !maximizing);
+				beta = (tempVal < beta ? tempVal : beta);
+				if (alpha >= beta) {
+					System.out.println("CUT!==========================" + beta);
+					return beta;
+				}
+			}
+			return beta;
+		}
 	}
 
 	// public Node generateTree(Node node, int depth, boolean maximizingPlayer){
@@ -200,57 +208,60 @@ public class MinMax {
 	// return bestValue;
 	// }
 
-	public ValueMove alphaBeta(Node node, int depth, int player, boolean maximizingPlayer, int maxPlayerBestValue,
-			int minPlayerBestValue) {
-
-		if (depth == 0) {
-			return new ValueMove(node.getBoard().evaluateBoard(), null);
-			// return /*player * */node.getBoard().evaluateBoard();
-		}
-
-		int bestValue;
-		Move bestMove;
-		Board board = node.getBoard();
-		if (maximizingPlayer) {
-			List<Move> moveList = board.generateMoves();
-			bestMove = moveList.get(0);
-			bestValue = -10_000;
-			for (Move move : moveList) {
-				Board newBoard = board.makeMove(move);
-				Node newNode = new Node(newBoard, move, node);
-				ValueMove newValueMove;
-				newValueMove = alphaBeta(newNode, depth - 1, player, !maximizingPlayer, minPlayerBestValue,
-						maxPlayerBestValue);
-				newNode.setValue(newValueMove.getValue());
-				if (newValueMove.getValue() >= bestValue) {
-					bestMove = move;
-					bestValue = newValueMove.getValue();
-				}
-				if (bestValue >= minPlayerBestValue) {
-					return new ValueMove(bestValue, bestMove);
-				}
-			}
-			return new ValueMove(bestValue, bestMove);
-		} else {
-			bestValue = 10_000;
-			List<Move> moveList = board.generateMoves();
-			bestMove = moveList.get(0);
-			for (Move move : moveList) {
-				Board newBoard = board.makeMove(move);
-				Node newNode = new Node(newBoard, move, node);
-				ValueMove newValueMove;
-				newValueMove = alphaBeta(newNode, depth - 1, player, !maximizingPlayer, minPlayerBestValue,
-						maxPlayerBestValue);
-				if (newValueMove.getValue() <= bestValue) {
-					bestMove = move;
-					bestValue = newValueMove.getValue();
-				}
-				if (bestValue <= maxPlayerBestValue) {
-					return new ValueMove(bestValue, bestMove);
-				}
-			}
-			return new ValueMove(bestValue, bestMove);
-		}
-	}
+	// public ValueMove alphaBeta(Node node, int depth, int player, boolean
+	// maximizingPlayer, int maxPlayerBestValue,
+	// int minPlayerBestValue) {
+	//
+	// if (depth == 0) {
+	// return new ValueMove(node.getBoard().evaluateBoard(), null);
+	// // return /*player * */node.getBoard().evaluateBoard();
+	// }
+	//
+	// int bestValue;
+	// Move bestMove;
+	// Board board = node.getBoard();
+	// if (maximizingPlayer) {
+	// List<Move> moveList = board.generateMoves();
+	// bestMove = moveList.get(0);
+	// bestValue = -10_000;
+	// for (Move move : moveList) {
+	// Board newBoard = board.makeMove(move);
+	// Node newNode = new Node(newBoard, move, node);
+	// ValueMove newValueMove;
+	// newValueMove = alphaBeta(newNode, depth - 1, player, !maximizingPlayer,
+	// minPlayerBestValue,
+	// maxPlayerBestValue);
+	// newNode.setValue(newValueMove.getValue());
+	// if (newValueMove.getValue() >= bestValue) {
+	// bestMove = move;
+	// bestValue = newValueMove.getValue();
+	// }
+	// if (bestValue >= minPlayerBestValue) {
+	// return new ValueMove(bestValue, bestMove);
+	// }
+	// }
+	// return new ValueMove(bestValue, bestMove);
+	// } else {
+	// bestValue = 10_000;
+	// List<Move> moveList = board.generateMoves();
+	// bestMove = moveList.get(0);
+	// for (Move move : moveList) {
+	// Board newBoard = board.makeMove(move);
+	// Node newNode = new Node(newBoard, move, node);
+	// ValueMove newValueMove;
+	// newValueMove = alphaBeta(newNode, depth - 1, player, !maximizingPlayer,
+	// minPlayerBestValue,
+	// maxPlayerBestValue);
+	// if (newValueMove.getValue() <= bestValue) {
+	// bestMove = move;
+	// bestValue = newValueMove.getValue();
+	// }
+	// if (bestValue <= maxPlayerBestValue) {
+	// return new ValueMove(bestValue, bestMove);
+	// }
+	// }
+	// return new ValueMove(bestValue, bestMove);
+	// }
+	// }
 
 }

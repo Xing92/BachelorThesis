@@ -99,9 +99,6 @@ public class TicTacToeBoard implements Board {
 			newPlayer = switchPlayer();
 		}
 		TicTacToeBoard newBoard = new TicTacToeBoard(newBoardInt, newPlayer);
-		if (newBoard.checkWin(player)) {
-			System.out.println("Player " + player + " won!");
-		}
 		return newBoard;
 	}
 

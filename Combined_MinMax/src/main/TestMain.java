@@ -21,7 +21,7 @@ public class TestMain extends JFrame{
 		System.out.println("Started");
 		
 		int depth = 7;
-		Node rootNode = minmax.generateTree(board, depth, 1);
+		Node rootNode = minmax.startMinMax(board, depth, 1);
 //		minmax.minMax(rootNode, depth);
 		
 		System.out.println("Finished");

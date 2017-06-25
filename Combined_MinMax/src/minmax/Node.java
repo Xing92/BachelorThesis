@@ -7,8 +7,7 @@ public class Node {
 	private Board board;
 	private Move move;
 	private Node parent;
-	private List<Node> children = new ArrayList<Node>();;
-	private boolean isRootNode = false;
+	private List<Node> children = new ArrayList<Node>();
 
 	private int value;
 
@@ -21,7 +20,6 @@ public class Node {
 
 	public Node(Board board) {
 		this.board = board;
-		this.isRootNode = true;
 	}
 
 	public void addChild(Node child) {

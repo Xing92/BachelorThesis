@@ -17,6 +17,10 @@ import minmax.Move;
 import minmax.Node;
 import minmax.ValueMove;
 import resources.ImageContainer;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class ConnectFourMainWindow extends JFrame {
 
@@ -28,6 +32,10 @@ public class ConnectFourMainWindow extends JFrame {
 	private int b1, b2, b3, b4, b5, b6, b7;
 	boolean useAi = true;
 	private MinMax minMax;
+	JButton btnRefresh = new JButton("Refresh");
+	JCheckBox check = new JCheckBox("check");
+
+
 
 	/**
 	 * Create the application.
@@ -46,6 +54,8 @@ public class ConnectFourMainWindow extends JFrame {
 			public void paint(Graphics g) {
 				super.paint(g);
 				Graphics2D g2d = (Graphics2D) g;
+				
+				System.out.println("Karol");
 
 				for (int i = 0; i < 7; i++) {
 					for (int j = 0; j < 6; j++) {
@@ -64,6 +74,7 @@ public class ConnectFourMainWindow extends JFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 800, 800);
 		frame.getContentPane().setLayout(null);
+		
 
 		JButton btnUsencomputer = new JButton("Use AI");
 		btnUsencomputer.addActionListener(new ActionListener() {
@@ -163,18 +174,66 @@ public class ConnectFourMainWindow extends JFrame {
 		});
 		button_NewGame.setBounds(10, 384, 111, 25);
 		frame.getContentPane().add(button_NewGame);
+		
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				test();
+				
+				/*Karol
+				 */
+				
+				
+				
+			}
+		});
+		btnRefresh.setBounds(32, 625, 89, 23);
+		frame.getContentPane().add(btnRefresh);
+		check.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				test();
+				//check.setSelected(!check.isSelected());
+			}
+		});
+		
+		check.setBounds(36, 546, 97, 23);
+		frame.getContentPane().add(check);
 	}
 
-	private void makeMove(int intMove, boolean useAi) {
-		Move move = new ConnectFourMove(board.getPlayer(), intMove, (Integer) spinner.getValue());
-		board = board.makeMove(move);
-		frame.repaint();
+	
+	public void test(){
 		board.isGameFinished();
 		if (useAi) {
 			minMax = new MinMax();
-			Node rootNode = minMax.generateTree(board, (Integer) spinner.getValue(), board.getPlayer());
-			minMax.minMax(rootNode, (Integer) spinner.getValue());
-			rootNode.printValues();
+			Node rootNode = minMax.startMinMax(board, (Integer) spinner.getValue(), board.getPlayer());
+//			minMax.minMax(rootNode, (Integer) spinner.getValue());
+//			rootNode.printValues();
+			System.out.println("Best move:" + rootNode.getBestMove().getMove());
+			board = board.makeMove(rootNode.getBestMove());
+			frame.repaint();
+		}
+		
+	}
+	
+	private void makeMove(int intMove, boolean useAi) {
+		Move move = new ConnectFourMove(board.getPlayer(), intMove, (Integer) spinner.getValue());
+		board = board.makeMove(move);
+		
+//		frame.repaint(100);
+		
+		test();
+//		frame.
+		
+		
+//		board.isGameFinished();
+	//	if (useAi) {
+		//	minMax = new MinMax();
+			//Node rootNode = minMax.startMinMax(board, (Integer) spinner.getValue(), board.getPlayer());
+//			minMax.minMax(rootNode, (Integer) spinner.getValue());
+//			rootNode.printValues();
+			//System.out.println("Best move:" + rootNode.getBestMove().getMove());
+			//board = board.makeMove(rootNode.getBestMove());
+			
+//			frame.repaint();
 
 			// Node node = new Node(board);
 			// ValueMove vm = minMax.minMax(board, move.getDepth());
@@ -200,7 +259,13 @@ public class ConnectFourMainWindow extends JFrame {
 			// System.out.println("Done minmax. Best value: " +
 			// valueMove.getValue());
 			// board.isGameFinished();
-		}
+		//}
 	}
+	 private class MyThread extends Thread {
 
+		    public void run(){
+		       System.out.println("MyThread running");
+		       frame.repaint();
+		    }
+		  }
 }
