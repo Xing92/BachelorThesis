@@ -17,9 +17,12 @@ public class MinMax {
 		double difference1 = (mid_time - start_time) / 1e6;
 		double difference2 = (end_time - mid_time) / 1e6;
 		double difference3 = (end_time - start_time) / 1e6;
-		System.out.println("Generate time: " + difference1 + " ms");
-		System.out.println("MinMax   time: " + difference2 + " ms");
-		System.out.println("Depth: " + depth + " - " + difference3 + " ms");
+
+		System.out.println("Depth-Gen_time-MM_time: " + depth + " " + difference1 + " " + difference2);
+		
+//		System.out.println("Generate time: " + difference1 + " ms");
+//		System.out.println("MinMax   time: " + difference2 + " ms");
+//		System.out.println("Depth: " + depth + " - " + difference3 + " ms");
 
 		return node;
 	}
@@ -78,12 +81,12 @@ public class MinMax {
 
 	private void generateSubtree(Node subRootNode, int depth, int player) {
 		Board board = subRootNode.getBoard();
+		List<Move> moveList = board.generateMoves();
 
-		if (depth == 0 || board.isGameFinished()) {
+		if (depth == 0 || moveList.isEmpty()) {
 			subRootNode.setValue(board.evaluateBoard(player));
 			return;
 		}
-		List<Move> moveList = board.generateMoves();
 		for (Move move : moveList) {
 			Board tempBoard = board.makeMove(move);
 			Node tempNode = new Node(tempBoard, move, subRootNode);
@@ -92,8 +95,8 @@ public class MinMax {
 	}
 
 	private void minMax(Node node) {
-//		maxMove(node);
-		alphaBeta(node, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+		maxMove(node);
+//		alphaBeta(node, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
 	}
 
 	private int maxMove(Node node) {
@@ -136,7 +139,7 @@ public class MinMax {
 				alpha = (tempVal > alpha ? tempVal : alpha);
 				childNode.setValue(alpha);
 				if (alpha >= beta) {
-					System.out.println("CUT!==========================" + alpha);
+//					System.out.println("CUT!==========================" + alpha);
 					return alpha;
 				}
 			}
@@ -146,7 +149,7 @@ public class MinMax {
 				int tempVal = alphaBeta(childNode, alpha, beta, !maximizing);
 				beta = (tempVal < beta ? tempVal : beta);
 				if (alpha >= beta) {
-					System.out.println("CUT!==========================" + beta);
+//					System.out.println("CUT!==========================" + beta);
 					return beta;
 				}
 			}

@@ -1,3 +1,5 @@
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -7,6 +9,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 public class MainWindow extends JFrame {
+	public LogicBoard LB = new LogicBoard();
+	public ImageContainer IC = new ImageContainer();
 	DrawBoard DB = new DrawBoard();
 	private int b1,b2,b3,b4,b5,b6,b7;
 	private boolean isGameOver;
@@ -25,7 +29,7 @@ public class MainWindow extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		if(b1<6){
         			isGameOver = DB.LB.InsertObject(0);
-        			DB.repaint();
+        			repaint();
         			b1++;
         			checkWin();
         		}
@@ -43,7 +47,7 @@ public class MainWindow extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		if(b2<6){
         			isGameOver = DB.LB.InsertObject(1);
-        			DB.repaint();
+        			repaint();
         			b2++;
         			checkWin();
         		}
@@ -61,7 +65,7 @@ public class MainWindow extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		if(b3<6){
         			isGameOver = DB.LB.InsertObject(2);
-        			DB.repaint();
+        			repaint();
         			b3++;
         			checkWin();
         		}
@@ -79,7 +83,7 @@ public class MainWindow extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		if(b4<6){
         			isGameOver = DB.LB.InsertObject(3);
-        			DB.repaint();
+        			repaint();
         			b4++;
         			checkWin();
         		}
@@ -97,7 +101,7 @@ public class MainWindow extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		if(b5<6){
         			isGameOver = DB.LB.InsertObject(4);
-        			DB.repaint();
+        			repaint();
         			b5++;
         			checkWin();
         		}
@@ -115,7 +119,7 @@ public class MainWindow extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		if(b6<6){
         			isGameOver = DB.LB.InsertObject(5);
-        			DB.repaint();
+        			repaint();
         			b6++;
         			checkWin();
         		}
@@ -133,7 +137,7 @@ public class MainWindow extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		if(b7<6){
         			isGameOver = DB.LB.InsertObject(6);
-        			DB.repaint();
+        			repaint();
         			b7++;
         			checkWin();
         		}
@@ -157,7 +161,7 @@ public class MainWindow extends JFrame {
         		
         		DB.LB = new LogicBoard();
         		DB.LB.setMovesAhead((Integer) spinner.getValue());
-        		DB.repaint();
+        		repaint();
         		b1=0;b2=0;b3=0;b4=0;b5=0;b6=0;b7=0;
         		button_1.setEnabled(true);
         		button_2.setEnabled(true);
@@ -220,5 +224,25 @@ public class MainWindow extends JFrame {
 
     public static void main(String[] args) {
         new MainWindow();
+    }
+    
+    public void paint(Graphics g) {
+        super.paint(g);
+        Graphics2D g2d = (Graphics2D)g;
+         
+
+        for(int i=0; i<7; i++){
+        	for(int j=0; j<6; j++){
+        		if(LB.board[i][j]==0){
+        			g2d.drawImage(IC.getBlank(),155+80*i,160+80*j,this);
+        		}
+        		else if(LB.board[i][j]==1){
+        			g2d.drawImage(IC.getCross(),155+80*i,160+80*j,this);
+        		}
+        		else if(LB.board[i][j]==-1){
+        			g2d.drawImage(IC.getCircle(),155+80*i,160+80*j,this);
+        		}
+        	}
+        }
     }
 }

@@ -30,6 +30,7 @@ public class TicTacToeMainWindow {
 	JSpinner spinner;
 	JButton button_1,button_2,button_3,button_4,button_5,button_6,button_7,button_8,button_9;
 	private boolean useAi = true;
+	MinMax minmax = new MinMax();
 
 	/**
 	 * Create the application.
@@ -155,6 +156,7 @@ public class TicTacToeMainWindow {
 		JButton btnNewGame = new JButton("New Game");
 		btnNewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("=== Next Game ===");
 				board = new TicTacToeBoard();
 				frame.repaint();
 				enableButtons();
@@ -183,6 +185,23 @@ public class TicTacToeMainWindow {
 		});
 		btnExit.setBounds(20, 458, 110, 23);
 		frame.getContentPane().add(btnExit);
+		
+		JButton btnMakeMove = new JButton("Make Move");
+		btnMakeMove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+//				MinMax minmax = new MinMax();
+				Node newNode = minmax.startMinMax(board, (Integer) spinner.getValue(), board.getPlayer());
+				if(newNode.getBestMove() != null){
+					Move newMove = new TicTacToeMove(board.getPlayer(), newNode.getBestMove().getMove(), (Integer) spinner.getValue());
+					board = board.makeMove(newMove);
+					frame.repaint();
+					checkFinish();
+				}
+			}
+		});
+		btnMakeMove.setBounds(20, 492, 110, 23);
+		frame.getContentPane().add(btnMakeMove);
 	}
 
 	private void makeMove(int intMove) {
@@ -191,7 +210,7 @@ public class TicTacToeMainWindow {
 		frame.repaint();
 		checkFinish();
 		if(useAi){
-			MinMax minmax = new MinMax();
+//			MinMax minmax = new MinMax();
 			Node newNode = minmax.startMinMax(board, (Integer) spinner.getValue(), board.getPlayer());
 			if(newNode.getBestMove() != null){
 				Move newMove = new TicTacToeMove(board.getPlayer(), newNode.getBestMove().getMove(), (Integer) spinner.getValue());
