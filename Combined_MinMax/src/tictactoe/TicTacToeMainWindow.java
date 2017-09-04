@@ -1,26 +1,21 @@
 package tictactoe;
 
-import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 import minmax.Board;
 import minmax.MinMax;
 import minmax.Move;
 import minmax.Node;
 import resources.ImageContainer;
-
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-
-import connectfour.ConnectFourBoard;
-import connectfour.ConnectFourMove;
 
 public class TicTacToeMainWindow {
 

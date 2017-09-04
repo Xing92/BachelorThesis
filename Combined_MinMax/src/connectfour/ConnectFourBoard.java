@@ -15,7 +15,8 @@ public class ConnectFourBoard implements Board {
 
 	private int checkMovesAhead;
 
-	private static int[][] evaluationTable = {{3,4,5,5,4,3},{4,6,8,8,6,4},{5,8,11,11,8,5},{7,10,13,13,10,7},{5,8,11,11,8,5},{4,6,8,8,6,4},{3,4,5,5,4,3}};
+	private static int[][] evaluationTable = { { 3, 4, 5, 5, 4, 3 }, { 4, 6, 8, 8, 6, 4 }, { 5, 8, 11, 11, 8, 5 },
+			{ 7, 10, 13, 13, 10, 7 }, { 5, 8, 11, 11, 8, 5 }, { 4, 6, 8, 8, 6, 4 }, { 3, 4, 5, 5, 4, 3 } };
 
 	private static int iterationCounter = 0;
 	private int selfIterationCounter;
@@ -118,30 +119,30 @@ public class ConnectFourBoard implements Board {
 		if (scoreFours(player) > 0) {
 			score = 10_000_000;
 		} else if (scoreFours(switchPlayer(player)) > 0) {
-//			printBoard();
+			// printBoard();
 			score = -10_000_000;
 		}
 		return score;
 	}
 
-	
-	public int scoreOnes(int player){
+	public int scoreOnes(int player) {
 		int score = 0;
-		 for (int i = 0; i < BOARD_SIZE_X; i++)
-	            for (int j = 0; j <BOARD_SIZE_Y; j++)
-	                if (board[i][j] == player)
-	                	score += evaluationTable[i][j];
-	                else if (board[i][j] == switchPlayer(player))
-	                	score -= evaluationTable[i][j];
+		for (int i = 0; i < BOARD_SIZE_X; i++)
+			for (int j = 0; j < BOARD_SIZE_Y; j++)
+				if (board[i][j] == player)
+					score += evaluationTable[i][j];
+				else if (board[i][j] == switchPlayer(player))
+					score -= evaluationTable[i][j];
 		return score;
 	}
-	
+
 	public int evaluateBoard(int player) {
-		int score = scoreTwos(player) + scoreThrees(player) - scoreTwos(switchPlayer(player)) - scoreThrees(switchPlayer(player)) + scoreOnes(player);
+		int score = scoreTwos(player) + scoreThrees(player) - scoreTwos(switchPlayer(player))
+				- scoreThrees(switchPlayer(player)) + scoreOnes(player);
 		if (scoreFours(player) > 0) {
 			score = 10_000_000;
 		} else if (scoreFours(switchPlayer(player)) > 0) {
-//			printBoard();
+			// printBoard();
 			score = -10_000_000;
 		}
 		if (player == this.player) {
@@ -234,12 +235,58 @@ public class ConnectFourBoard implements Board {
 		return false;
 	}
 
+	public boolean checkWin(int player) {
+
+		return checkWinRows(player) || checkWinColumns(player) || checkWinDiagonals(player);
+	}
+
+	private boolean checkWinColumns(int player) {
+		for (int row = 0; row < BOARD_SIZE_Y; row++) {
+			for (int column = 0; column < BOARD_SIZE_X - 3; column++) {
+				if (player == board[column][row] && player == board[column][row + 1] && player == board[column][row + 2]
+						&& player == board[column][row + 3]) {
+					System.out.println("Player: " + player + " WINS Columns!");
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean checkWinRows(int player) {
+		for (int column = 0; column < BOARD_SIZE_X; column++) {
+			for (int row = 0; row < BOARD_SIZE_Y - 3; row++) {
+				if (player == board[column][row] && player == board[column + 1][row] && player == board[column + 2][row]
+						&& player == board[column + 3][row]) {
+					System.out.println("Player: " + player + " WINS Rows!");
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean checkWinDiagonals(int player) {
+		for (int column = 0; column < BOARD_SIZE_X - 3; column++) {
+			for (int row = 0; row < BOARD_SIZE_Y - 3; row++) {
+				if (player == board[column][row] && player == board[column + 1][row + 1]
+						&& player == board[column + 2][row + 2] && player == board[column + 3][row + 3]) {
+					System.out.println("Player: " + player + " WINS Diags!");
+					return true;
+				} else if (player == board[column+3][row] && player == board[column + 2][row + 1]
+						&& player == board[column + 1][row + 2] && player == board[column][row + 3]) {
+					System.out.println("Player: " + player + " WINS Diags!");
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public List<Move> generateMoves() {
-		if (isGameFinished()) { // TODO consider moving
-								// it into different
-								// place - somewhere
-								// earlier
+		if (isGameFinished()) { // TODO consider moving it into different place
+								// - somewhere earlier
 			return new ArrayList<Move>();
 		}
 		List<Move> moveList = new ArrayList<Move>();

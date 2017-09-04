@@ -4,13 +4,15 @@ import java.util.List;
 
 public class MinMax {
 
+	private static int generateTreeCounter;
+
 	public Node startMinMax(Board board, int depth, int player) {
 		long start_time = System.nanoTime();
 
 		Node node = generateTree(board, depth, player);
-		
+
 		long mid_time = System.nanoTime();
-		
+
 		minMax(node);
 
 		long end_time = System.nanoTime();
@@ -18,13 +20,26 @@ public class MinMax {
 		double difference2 = (end_time - mid_time) / 1e6;
 		double difference3 = (end_time - start_time) / 1e6;
 
-		System.out.println("Depth-Gen_time-MM_time: " + depth + " " + difference1 + " " + difference2);
-		
-//		System.out.println("Generate time: " + difference1 + " ms");
-//		System.out.println("MinMax   time: " + difference2 + " ms");
-//		System.out.println("Depth: " + depth + " - " + difference3 + " ms");
+		System.out.println("Depth-Checks-Gen_time-MM_time: " + depth + " " + generateTreeCounter + " " + difference1 + " " + difference2);
+
+		// System.out.println("Generate time: " + difference1 + " ms");
+		// System.out.println("MinMax time: " + difference2 + " ms");
+		// System.out.println("Depth: " + depth + " - " + difference3 + " ms");
 
 		return node;
+	}
+
+	private int wholeMinMax() {
+
+		return 0;
+	}
+
+	private int wholeMinMove() {
+		return 0;
+	}
+
+	private int wholeMaxMove() {
+		return 0;
 	}
 
 	// public ValueMove minMax(Board board, int depth) {
@@ -74,8 +89,10 @@ public class MinMax {
 	// }
 
 	private Node generateTree(Board board, int depth, int player) {
+		generateTreeCounter = 0;
 		Node rootNode = new Node(board);
 		generateSubtree(rootNode, depth, player);
+//		System.out.println("Generate Tree Counter: " + generateTreeCounter);
 		return rootNode;
 	}
 
@@ -84,6 +101,7 @@ public class MinMax {
 		List<Move> moveList = board.generateMoves();
 
 		if (depth == 0 || moveList.isEmpty()) {
+			generateTreeCounter++;
 			subRootNode.setValue(board.evaluateBoard(player));
 			return;
 		}
@@ -95,8 +113,8 @@ public class MinMax {
 	}
 
 	private void minMax(Node node) {
-		maxMove(node);
-//		alphaBeta(node, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+		// maxMove(node);
+		alphaBeta(node, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
 	}
 
 	private int maxMove(Node node) {
@@ -139,7 +157,8 @@ public class MinMax {
 				alpha = (tempVal > alpha ? tempVal : alpha);
 				childNode.setValue(alpha);
 				if (alpha >= beta) {
-//					System.out.println("CUT!==========================" + alpha);
+					// System.out.println("CUT!==========================" +
+					// alpha);
 					return alpha;
 				}
 			}
@@ -149,7 +168,8 @@ public class MinMax {
 				int tempVal = alphaBeta(childNode, alpha, beta, !maximizing);
 				beta = (tempVal < beta ? tempVal : beta);
 				if (alpha >= beta) {
-//					System.out.println("CUT!==========================" + beta);
+					// System.out.println("CUT!==========================" +
+					// beta);
 					return beta;
 				}
 			}

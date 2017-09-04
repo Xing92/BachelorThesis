@@ -15,12 +15,8 @@ import minmax.Board;
 import minmax.MinMax;
 import minmax.Move;
 import minmax.Node;
-import minmax.ValueMove;
 import resources.ImageContainer;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
+import tictactoe.TicTacToeBoard;
 
 public class ConnectFourMainWindow extends JFrame {
 
@@ -31,10 +27,7 @@ public class ConnectFourMainWindow extends JFrame {
 	private JButton button_1, button_2, button_3, button_4, button_5, button_6, button_7;
 	private int b1, b2, b3, b4, b5, b6, b7;
 	boolean useAi = true;
-	private MinMax minMax;
-	JButton btnRefresh = new JButton("Refresh");
-	JCheckBox check = new JCheckBox("check");
-
+	private MinMax minMax = new MinMax();
 
 
 	/**
@@ -54,10 +47,7 @@ public class ConnectFourMainWindow extends JFrame {
 			public void paint(Graphics g) {
 				super.paint(g);
 				Graphics2D g2d = (Graphics2D) g;
-				
-				System.out.println("Karol");
-
-				for (int i = 0; i < 7; i++) {
+								for (int i = 0; i < 7; i++) {
 					for (int j = 0; j < 6; j++) {
 						if (board.getBoard()[i][j] == 0) {
 							g2d.drawImage(IC.getBlank(), 155 + 80 * i, 560 - 80 * j, this);
@@ -175,28 +165,25 @@ public class ConnectFourMainWindow extends JFrame {
 		button_NewGame.setBounds(10, 384, 111, 25);
 		frame.getContentPane().add(button_NewGame);
 		
-		btnRefresh.addActionListener(new ActionListener() {
+		JButton button = new JButton("Make Move");
+		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				test();
+				if(board == null)System.out.println("Board null");
+				if(spinner == null)System.out.println("Spinner null");
+				if(board.getPlayer() == 0)System.out.println("Player zero");
+				if(minMax == null)System.out.println("Minmax null");
 				
-				/*Karol
-				 */
-				
-				
-				
+				Node newNode = minMax.startMinMax(board, (Integer) spinner.getValue(), board.getPlayer());
+				if(newNode.getBestMove() != null){
+					Move newMove = new ConnectFourMove(board.getPlayer(), newNode.getBestMove().getMove(), (Integer) spinner.getValue());
+					board = board.makeMove(newMove);
+					frame.repaint();
+					checkFinish();
+				}
 			}
 		});
-		btnRefresh.setBounds(32, 625, 89, 23);
-		frame.getContentPane().add(btnRefresh);
-		check.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				test();
-				//check.setSelected(!check.isSelected());
-			}
-		});
-		
-		check.setBounds(36, 546, 97, 23);
-		frame.getContentPane().add(check);
+		button.setBounds(11, 531, 110, 23);
+		frame.getContentPane().add(button);
 	}
 
 	
@@ -207,7 +194,7 @@ public class ConnectFourMainWindow extends JFrame {
 			Node rootNode = minMax.startMinMax(board, (Integer) spinner.getValue(), board.getPlayer());
 //			minMax.minMax(rootNode, (Integer) spinner.getValue());
 //			rootNode.printValues();
-			System.out.println("Best move:" + rootNode.getBestMove().getMove());
+//			System.out.println("Best move:" + rootNode.getBestMove().getMove());
 			board = board.makeMove(rootNode.getBestMove());
 			frame.repaint();
 		}
@@ -261,11 +248,38 @@ public class ConnectFourMainWindow extends JFrame {
 			// board.isGameFinished();
 		//}
 	}
-	 private class MyThread extends Thread {
-
-		    public void run(){
-		       System.out.println("MyThread running");
-		       frame.repaint();
-		    }
-		  }
+	private void checkFinish(){
+		if (board.checkWin(1)) {
+			disableButtons();
+			JOptionPane.showMessageDialog(null, "Player 1 wins");
+		}
+		else if (board.checkWin(-1)) {
+			disableButtons();
+			JOptionPane.showMessageDialog(null, "Player 2 (AI) wins");
+		}
+		else if (board.isGameFinished()) {
+			disableButtons();
+			JOptionPane.showMessageDialog(null, "Nobody wins");
+		}
+	}
+	
+	private void disableButtons(){
+		button_1.setEnabled(false);
+		button_2.setEnabled(false);
+		button_3.setEnabled(false);
+		button_4.setEnabled(false);
+		button_5.setEnabled(false);
+		button_6.setEnabled(false);
+		button_7.setEnabled(false);
+	}
+	
+	private void enableButtons(){
+		button_1.setEnabled(true);
+		button_2.setEnabled(true);
+		button_3.setEnabled(true);
+		button_4.setEnabled(true);
+		button_5.setEnabled(true);
+		button_6.setEnabled(true);
+		button_7.setEnabled(true);
+	}
 }

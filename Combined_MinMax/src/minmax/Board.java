@@ -20,6 +20,8 @@ public interface Board {
 	
 	public int getPlayer();
 	
+	public boolean checkWin(int player);
+	
 	public Board getBoardCopy();
 
 }
