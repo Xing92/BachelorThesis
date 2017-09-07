@@ -82,10 +82,10 @@ public class MainWindow {
 
 	private static void startMe() {
 
-		int[][] b = new int[7][6];
+		byte[][] b = new byte[7][6];
 
 		MinMax mm = new MinMax();
-		Board board = new ConnectFourBoard(b, 1, 7);
+		Board board = new ConnectFourBoard(b, (byte) 1, 7);
 		System.out.println("Generating...");
 		Node node = mm.startMinMax(board, 7, 1);
 		// Node node = new Node(board);

@@ -15,45 +15,20 @@ public class TestMain extends JFrame{
 	
 	public static void main(String[] args){
 		
-		Board board = new ConnectFourBoard();
-		MinMax minmax = new MinMax();
+
+		System.out.println("Max mem: " + Runtime.getRuntime().maxMemory());
 
 		System.out.println("Started");
-		
-		int depth = 7;
-		Node rootNode = minmax.startMinMax(board, depth, 1);
-//		minmax.minMax(rootNode, depth);
-		
-		System.out.println("Finished");
-		rootNode.printValues();
-		
-		int option;
-		Node newNode = rootNode;
-		Scanner scanIn = new Scanner(System.in);
-		whileloop: while (true) {
-			option = Integer.parseInt(scanIn.nextLine());
-			switch (option) {
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-				newNode = newNode.getChildren().get(option - 1);
-//				board = newNode.getBoard();
-//				board = board.makeMove(new ConnectFourMove(board.getPlayer(), option - 1));
-//				newNode = minmax.generateTree(board, depth);
-				newNode.printBoard();
-				newNode.printValues();
-				break;
-			default:
-				break whileloop;
-			}
 
-		}
-		scanIn.close();
-		
+		long s1, s2, sum;
+		s1 = Runtime.getRuntime().freeMemory();
+		System.out.println("Before: " + s1);
+		Board board = new ConnectFourBoard();
+		s2 = Runtime.getRuntime().freeMemory();
+		System.out.println("After: " + s2);
+		sum = s1 - s2;
+		System.out.println("Sum: " + sum);
+	
 	}
 	
 }

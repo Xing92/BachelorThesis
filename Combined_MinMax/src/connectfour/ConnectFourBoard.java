@@ -10,40 +10,40 @@ import minmax.Move;
 
 public class ConnectFourBoard implements Board {
 
-	private int board[][];
-	private int player;
+	private byte board[][];
+	private byte player;
 
 	private int checkMovesAhead;
 
-	private static int[][] evaluationTable = { { 3, 4, 5, 5, 4, 3 }, { 4, 6, 8, 8, 6, 4 }, { 5, 8, 11, 11, 8, 5 },
+	private static byte[][] evaluationTable = { { 3, 4, 5, 5, 4, 3 }, { 4, 6, 8, 8, 6, 4 }, { 5, 8, 11, 11, 8, 5 },
 			{ 7, 10, 13, 13, 10, 7 }, { 5, 8, 11, 11, 8, 5 }, { 4, 6, 8, 8, 6, 4 }, { 3, 4, 5, 5, 4, 3 } };
 
 	private static int iterationCounter = 0;
 	private int selfIterationCounter;
 
-	private final static int BOARD_SIZE_X = 7;
-	private final static int BOARD_SIZE_Y = 6;
+	private final static byte BOARD_SIZE_X = 7;
+	private final static byte BOARD_SIZE_Y = 6;
 
 	public ConnectFourBoard() {
-		board = new int[BOARD_SIZE_X][BOARD_SIZE_Y];
+		board = new byte[BOARD_SIZE_X][BOARD_SIZE_Y];
 		player = 1;
 	}
 
-	public int getPlayer() {
+	public byte getPlayer() {
 		return player;
 	}
 
-	public int[][] getBoard() {
+	public byte[][] getBoard() {
 		return board;
 	}
 
-	public ConnectFourBoard(int[][] board, int player) {
+	public ConnectFourBoard(byte[][] board, byte player) {
 		this.board = board;
 		this.player = player;
 		selfIterationCounter = iterationCounter++;
 	}
 
-	public ConnectFourBoard(int[][] board, int player, int checkMovesAhead) {
+	public ConnectFourBoard(byte[][] board, byte player, int checkMovesAhead) {
 		this(board, player);
 		this.checkMovesAhead = checkMovesAhead;
 	}
@@ -125,7 +125,7 @@ public class ConnectFourBoard implements Board {
 		return score;
 	}
 
-	public int scoreOnes(int player) {
+	public int scoreOnes(byte player) {
 		int score = 0;
 		for (int i = 0; i < BOARD_SIZE_X; i++)
 			for (int j = 0; j < BOARD_SIZE_Y; j++)
@@ -136,7 +136,7 @@ public class ConnectFourBoard implements Board {
 		return score;
 	}
 
-	public int evaluateBoard(int player) {
+	public int evaluateBoard(byte player) {
 		int score = scoreTwos(player) + scoreThrees(player) - scoreTwos(switchPlayer(player))
 				- scoreThrees(switchPlayer(player)) + scoreOnes(player);
 		if (scoreFours(player) > 0) {
@@ -151,7 +151,7 @@ public class ConnectFourBoard implements Board {
 		return score;
 	}
 
-	private int scoreTwos(int player) {
+	private int scoreTwos(byte player) {
 		int count = 0;
 		final int multiplicator = 10;
 		for (int row = 0; row < BOARD_SIZE_Y - 1; row++) {
@@ -171,7 +171,7 @@ public class ConnectFourBoard implements Board {
 		return count * multiplicator;
 	}
 
-	private int scoreThrees(int player) {
+	private int scoreThrees(byte player) {
 		int count = 0;
 		final int multiplicator = 100;
 		for (int row = 0; row < BOARD_SIZE_Y - 2; row++) {
@@ -195,7 +195,7 @@ public class ConnectFourBoard implements Board {
 		return count * multiplicator;
 	}
 
-	private int scoreFours(int player) {
+	private int scoreFours(byte player) {
 		int count = 0;
 		final int multiplicator = 1;
 		for (int row = 0; row < BOARD_SIZE_Y - 3; row++) {
@@ -235,14 +235,14 @@ public class ConnectFourBoard implements Board {
 		return false;
 	}
 
-	public boolean checkWin(int player) {
+	public boolean checkWin(byte player) {
 
 		return checkWinRows(player) || checkWinColumns(player) || checkWinDiagonals(player);
 	}
 
-	private boolean checkWinColumns(int player) {
-		for (int row = 0; row < BOARD_SIZE_Y; row++) {
-			for (int column = 0; column < BOARD_SIZE_X - 3; column++) {
+	private boolean checkWinColumns(byte player) {
+		for (int row = 0; row < BOARD_SIZE_Y - 3; row++) {
+			for (int column = 0; column < BOARD_SIZE_X; column++) {
 				if (player == board[column][row] && player == board[column][row + 1] && player == board[column][row + 2]
 						&& player == board[column][row + 3]) {
 					System.out.println("Player: " + player + " WINS Columns!");
@@ -253,9 +253,9 @@ public class ConnectFourBoard implements Board {
 		return false;
 	}
 
-	private boolean checkWinRows(int player) {
-		for (int column = 0; column < BOARD_SIZE_X; column++) {
-			for (int row = 0; row < BOARD_SIZE_Y - 3; row++) {
+	private boolean checkWinRows(byte player) {
+		for (int column = 0; column < BOARD_SIZE_X - 3; column++) {
+			for (int row = 0; row < BOARD_SIZE_Y; row++) {
 				if (player == board[column][row] && player == board[column + 1][row] && player == board[column + 2][row]
 						&& player == board[column + 3][row]) {
 					System.out.println("Player: " + player + " WINS Rows!");
@@ -266,7 +266,7 @@ public class ConnectFourBoard implements Board {
 		return false;
 	}
 
-	private boolean checkWinDiagonals(int player) {
+	private boolean checkWinDiagonals(byte player) {
 		for (int column = 0; column < BOARD_SIZE_X - 3; column++) {
 			for (int row = 0; row < BOARD_SIZE_Y - 3; row++) {
 				if (player == board[column][row] && player == board[column + 1][row + 1]
@@ -316,9 +316,9 @@ public class ConnectFourBoard implements Board {
 	}
 
 	private Board makeMove(ConnectFourMove move) {
-		int newBoard[][] = copyBoardValues(board);
+		byte newBoard[][] = copyBoardValues(board);
 		int column = move.getMove();
-		int newPlayer = player;
+		byte newPlayer = player;
 		// System.out.println(selfIterationCounter + ": " + column);
 		if (isMoveDoable(column)) {
 			newBoard[column][getRowFromColumn(column)] = player;
@@ -336,8 +336,8 @@ public class ConnectFourBoard implements Board {
 
 	}
 
-	private int switchPlayer(int player) {
-		return (player == 1) ? -1 : 1;
+	private byte switchPlayer(byte player) {
+		return (byte) ((player == 1) ? -1 : 1);
 	}
 
 	private int getRowFromColumn(int column) {
@@ -350,10 +350,10 @@ public class ConnectFourBoard implements Board {
 		return -1;
 	}
 
-	private int[][] copyBoardValues(int[][] board) {
-		int[][] newBoard = new int[BOARD_SIZE_X][BOARD_SIZE_Y];
-		for (int column = 0; column < BOARD_SIZE_X; column++) {
-			for (int row = 0; row < BOARD_SIZE_Y; row++) {
+	private byte[][] copyBoardValues(byte[][] board) {
+		byte[][] newBoard = new byte[BOARD_SIZE_X][BOARD_SIZE_Y];
+		for (byte column = 0; column < BOARD_SIZE_X; column++) {
+			for (byte row = 0; row < BOARD_SIZE_Y; row++) {
 				newBoard[column][row] = board[column][row];
 			}
 		}

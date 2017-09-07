@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -152,13 +153,14 @@ public class ConnectFourMainWindow extends JFrame {
 
 		spinner = new JSpinner();
 		spinner.setBounds(76, 421, 45, 22);
-		spinner.setModel(new SpinnerNumberModel(5, 1, 11, 2));
+		spinner.setModel(new SpinnerNumberModel(5, 1, 11, 1));
 		frame.getContentPane().add(spinner);
 
 		JButton button_NewGame = new JButton("New Game");
 		button_NewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				board = new ConnectFourBoard();
+				enableButtons();
 				frame.repaint();
 			}
 		});
@@ -195,7 +197,13 @@ public class ConnectFourMainWindow extends JFrame {
 //			minMax.minMax(rootNode, (Integer) spinner.getValue());
 //			rootNode.printValues();
 //			System.out.println("Best move:" + rootNode.getBestMove().getMove());
-			board = board.makeMove(rootNode.getBestMove());
+//			board = board.makeMove(rootNode.getBestMove());
+			
+			//TODO TEMPORAR!
+			Random generator = new Random();
+//			int i = generator.nextInt(10);
+			Move move1 = new ConnectFourMove(board.getPlayer(),generator.nextInt(7));
+			board = board.makeMove(move1);
 			frame.repaint();
 		}
 		
@@ -205,9 +213,10 @@ public class ConnectFourMainWindow extends JFrame {
 		Move move = new ConnectFourMove(board.getPlayer(), intMove, (Integer) spinner.getValue());
 		board = board.makeMove(move);
 		
-//		frame.repaint(100);
+		frame.repaint(100);
 		
 		test();
+		checkFinish();
 //		frame.
 		
 		
@@ -249,11 +258,11 @@ public class ConnectFourMainWindow extends JFrame {
 		//}
 	}
 	private void checkFinish(){
-		if (board.checkWin(1)) {
+		if (board.checkWin((byte) 1)) {
 			disableButtons();
 			JOptionPane.showMessageDialog(null, "Player 1 wins");
 		}
-		else if (board.checkWin(-1)) {
+		else if (board.checkWin((byte) -1)) {
 			disableButtons();
 			JOptionPane.showMessageDialog(null, "Player 2 (AI) wins");
 		}

@@ -217,11 +217,11 @@ public class TicTacToeMainWindow {
 	}
 	
 	private void checkFinish(){
-		if (((TicTacToeBoard) board).checkWin(1)) {
+		if (((TicTacToeBoard) board).checkWin((byte) 1)) {
 			disableButtons();
 			JOptionPane.showMessageDialog(null, "Player 1 wins");
 		}
-		else if (((TicTacToeBoard) board).checkWin(-1)) {
+		else if (((TicTacToeBoard) board).checkWin((byte) -1)) {
 			disableButtons();
 			JOptionPane.showMessageDialog(null, "Player 2 (AI) wins");
 		}

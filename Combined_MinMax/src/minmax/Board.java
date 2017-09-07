@@ -6,7 +6,7 @@ public interface Board {
 		
 	public int evaluateBoard();
 	
-	public int evaluateBoard(int player);
+	public int evaluateBoard(byte player);
 	
 	public boolean isGameFinished();
 	
@@ -16,11 +16,11 @@ public interface Board {
 	
 	public void printBoard();
 
-	public int[][] getBoard();
+	public byte[][] getBoard();
 	
-	public int getPlayer();
+	public byte getPlayer();
 	
-	public boolean checkWin(int player);
+	public boolean checkWin(byte player);
 	
 	public Board getBoardCopy();
 

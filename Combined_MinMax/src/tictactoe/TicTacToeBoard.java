@@ -9,17 +9,17 @@ import minmax.Move;
 
 public class TicTacToeBoard implements Board {
 
-	private int board[][];
-	private int player;
+	private byte board[][];
+	private byte player;
 
-	private static int BOARD_SIZE = 3;
+	private static byte BOARD_SIZE = 3;
 
 	public TicTacToeBoard() {
-		board = new int[BOARD_SIZE][BOARD_SIZE];
+		board = new byte[BOARD_SIZE][BOARD_SIZE];
 		player = 1;
 	}
 
-	public TicTacToeBoard(int[][] board, int player) {
+	public TicTacToeBoard(byte[][] board, byte player) {
 		this.board = board;
 		this.player = player;
 	}
@@ -31,7 +31,7 @@ public class TicTacToeBoard implements Board {
 	}
 
 	@Override
-	public int evaluateBoard(int player) {
+	public int evaluateBoard(byte player) {
 		if (checkWin(player))
 			return 10;
 		else if (checkWin(switchPlayer()))
@@ -45,8 +45,8 @@ public class TicTacToeBoard implements Board {
 	}
 
 	private boolean checkNoMoreMoves() {
-		for (int column = 0; column < BOARD_SIZE; column++) {
-			for (int row = 0; row < BOARD_SIZE; row++) {
+		for (byte column = 0; column < BOARD_SIZE; column++) {
+			for (byte row = 0; row < BOARD_SIZE; row++) {
 				if (board[row][column] == 0)
 					return false;
 			}
@@ -54,12 +54,12 @@ public class TicTacToeBoard implements Board {
 		return true;
 	}
 
-	public boolean checkWin(int player) {
+	public boolean checkWin(byte player) {
 
 		return checkWinRows(player) || checkWinColumns(player) || checkWinDiagonals(player);
 	}
 
-	private boolean checkWinRows(int player) {
+	private boolean checkWinRows(byte player) {
 		if (player == board[0][0] && player == board[0][1] && player == board[0][2]) {
 			return true;
 		} else if (player == board[1][0] && player == board[1][1] && player == board[1][2]) {
@@ -70,7 +70,7 @@ public class TicTacToeBoard implements Board {
 		return false;
 	}
 
-	private boolean checkWinColumns(int player) {
+	private boolean checkWinColumns(byte player) {
 		if (player == board[0][0] && player == board[1][0] && player == board[2][0]) {
 			return true;
 		} else if (player == board[0][1] && player == board[1][1] && player == board[2][1]) {
@@ -81,7 +81,7 @@ public class TicTacToeBoard implements Board {
 		return false;
 	}
 
-	private boolean checkWinDiagonals(int player) {
+	private boolean checkWinDiagonals(byte player) {
 		if (player == board[0][0] && player == board[1][1] && player == board[2][2]) {
 			return true;
 		} else if (player == board[0][2] && player == board[1][1] && player == board[2][0]) {
@@ -92,8 +92,8 @@ public class TicTacToeBoard implements Board {
 
 	@Override
 	public Board makeMove(Move move) {
-		int newBoardInt[][] = copyBoardValues(board);
-		int newPlayer = player;
+		byte newBoardInt[][] = copyBoardValues(board);
+		byte newPlayer = player;
 		if (isMoveDoable(move)) {
 			newBoardInt[move.getMove() % BOARD_SIZE][move.getMove() / BOARD_SIZE] = player;
 			newPlayer = switchPlayer();
@@ -102,18 +102,18 @@ public class TicTacToeBoard implements Board {
 		return newBoard;
 	}
 
-	private int switchPlayer() {
-		return (player == 1 ? -1 : 1);
+	private byte switchPlayer() {
+		return (byte) (player == 1 ? -1 : 1);
 	}
 
 	private boolean isMoveDoable(Move move) {
 		return (board[move.getMove() % BOARD_SIZE][move.getMove() / BOARD_SIZE] == 0 ? true : false);
 	}
 
-	private int[][] copyBoardValues(int[][] board) {
-		int[][] newBoard = new int[BOARD_SIZE][BOARD_SIZE];
-		for (int column = 0; column < BOARD_SIZE; column++) {
-			for (int row = 0; row < BOARD_SIZE; row++) {
+	private byte[][] copyBoardValues(byte[][] board) {
+		byte[][] newBoard = new byte[BOARD_SIZE][BOARD_SIZE];
+		for (byte column = 0; column < BOARD_SIZE; column++) {
+			for (byte row = 0; row < BOARD_SIZE; row++) {
 				newBoard[column][row] = board[column][row];
 			}
 		}
@@ -127,8 +127,8 @@ public class TicTacToeBoard implements Board {
 			return new ArrayList<Move>();
 		}
 		List<Move> moveList = new ArrayList<Move>();
-		for (int column = 0; column < BOARD_SIZE; column++) {
-			for (int row = 0; row < BOARD_SIZE; row++) {
+		for (byte column = 0; column < BOARD_SIZE; column++) {
+			for (byte row = 0; row < BOARD_SIZE; row++) {
 				Move move = new TicTacToeMove(player, column * 3 + row);
 				if (isMoveDoable(move)) {
 					moveList.add(move);
@@ -144,12 +144,12 @@ public class TicTacToeBoard implements Board {
 	}
 
 	@Override
-	public int[][] getBoard() {
+	public byte[][] getBoard() {
 		return board;
 	}
 
 	@Override
-	public int getPlayer() {
+	public byte getPlayer() {
 		return player;
 	}
 
