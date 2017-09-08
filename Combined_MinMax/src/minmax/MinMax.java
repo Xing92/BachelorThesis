@@ -220,6 +220,7 @@ public class MinMax {
 			for (Node childNode : node.getChildren()) {
 				int tempVal = alphaBeta(childNode, alpha, beta, !maximizing);
 				beta = (tempVal < beta ? tempVal : beta);
+				childNode.setValue(beta);
 				if (alpha >= beta) {
 					// System.out.println("CUT!==========================" +
 					// beta);

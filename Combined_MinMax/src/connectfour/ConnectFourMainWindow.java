@@ -153,7 +153,7 @@ public class ConnectFourMainWindow extends JFrame {
 
 		spinner = new JSpinner();
 		spinner.setBounds(76, 421, 45, 22);
-		spinner.setModel(new SpinnerNumberModel(5, 1, 11, 1));
+		spinner.setModel(new SpinnerNumberModel(5, 1, 21, 1));
 		frame.getContentPane().add(spinner);
 
 		JButton button_NewGame = new JButton("New Game");
