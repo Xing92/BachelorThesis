@@ -133,6 +133,7 @@ public class MinMax {
 	}
 
 	private int maxMove(Node node) {
+		goodAbCounter++;
 		if (node.getChildren().isEmpty()) {
 			return node.getValue();
 		}
@@ -148,6 +149,7 @@ public class MinMax {
 	}
 
 	private int minMove(Node node) {
+		goodAbCounter++;
 		if (node.getChildren().isEmpty()) {
 			return node.getValue();
 		}
@@ -201,6 +203,7 @@ public class MinMax {
 	}
 	
 	private int alphaBeta(Node node, int alpha, int beta, boolean maximizing) {
+		goodAbCounter++;
 		if (node.getChildren().isEmpty()) {
 			return node.getValue();
 		}
