@@ -18,11 +18,11 @@ public class MinMax {
 	public Node startMinMax(Board board, int depth, int player) {
 		goodAbCounter = 0;
 		cutsCounter = 0;
-		
+
 		long start_time = System.nanoTime();
 
-		Node node = new Node(board);
-		
+		 Node node = new Node(board);
+
 //		Node node = generateTree(board, depth, player);
 
 		long mid_time = System.nanoTime();
@@ -34,8 +34,10 @@ public class MinMax {
 		double difference2 = (end_time - mid_time) / 1e6;
 		double difference3 = (end_time - start_time) / 1e6;
 
-//		System.out.println("Depth-Checks-Gen_time-MM_time: " + depth + " " + generateTreeCounter + " " + difference1 + " " + difference2);
-		System.out.println("Depth-AB-Cuts-Gen_time-MM_time: " + depth + " " + goodAbCounter + " " + cutsCounter + " " + difference1 + " " + difference2);
+		// System.out.println("Depth-Checks-Gen_time-MM_time: " + depth + " " +
+		// generateTreeCounter + " " + difference1 + " " + difference2);
+		System.out.println("Depth-AB-Cuts-Gen_time-MM_time: " + depth + " " + goodAbCounter + " " + cutsCounter + " "
+				+ difference1 + " " + difference2);
 
 		// System.out.println("Generate time: " + difference1 + " ms");
 		// System.out.println("MinMax time: " + difference2 + " ms");
@@ -106,7 +108,7 @@ public class MinMax {
 		generateTreeCounter = 0;
 		Node rootNode = new Node(board);
 		generateSubtree(rootNode, depth, player);
-//		System.out.println("Generate Tree Counter: " + generateTreeCounter);
+		// System.out.println("Generate Tree Counter: " + generateTreeCounter);
 		return rootNode;
 	}
 
@@ -127,9 +129,10 @@ public class MinMax {
 	}
 
 	private void minMax(Node node, int depth, int player) {
-//		 maxMove(node);
-//		alphaBeta(node, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
-		goodAB(node.getBoard(), Integer.MIN_VALUE, Integer.MAX_VALUE, true, depth);
+//		maxMove(node);
+		// alphaBeta(node, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
+		 goodAB(node.getBoard(), Integer.MIN_VALUE, Integer.MAX_VALUE, true,
+		 depth);
 	}
 
 	private int maxMove(Node node) {
@@ -164,23 +167,23 @@ public class MinMax {
 		return bestValue;
 	}
 
-	private int goodAB(Board board, int alpha, int beta, boolean maximizing, int depth){
-//		if (node.getChildren().isEmpty()) {
-//			return node.getValue();
-//		}
+	private int goodAB(Board board, int alpha, int beta, boolean maximizing, int depth) {
+		// if (node.getChildren().isEmpty()) {
+		// return node.getValue();
+		// }
 		goodAbCounter++;
-		if(depth == 0){
+		if (depth == 0) {
 			return board.evaluateBoard();
 		}
-		
+
 		if (maximizing) {
 			for (Move move : board.generateMoves()) {
 				Board newBoard = board.makeMove(move);
-				int tempVal = goodAB(newBoard, alpha, beta, !maximizing, depth-1);
+				int tempVal = goodAB(newBoard, alpha, beta, !maximizing, depth - 1);
 				alpha = (tempVal > alpha ? tempVal : alpha);
 				if (alpha >= beta) {
-//					 System.out.println("CUT!==========================" +
-//					 alpha);
+					// System.out.println("CUT!==========================" +
+					// alpha);
 					cutsCounter++;
 					return alpha;
 				}
@@ -189,11 +192,11 @@ public class MinMax {
 		} else {
 			for (Move move : board.generateMoves()) {
 				Board newBoard = board.makeMove(move);
-				int tempVal = goodAB(newBoard, alpha, beta, !maximizing, depth-1);
+				int tempVal = goodAB(newBoard, alpha, beta, !maximizing, depth - 1);
 				beta = (tempVal < beta ? tempVal : beta);
 				if (alpha >= beta) {
-//					 System.out.println("CUT!==========================" +
-//					 beta);
+					// System.out.println("CUT!==========================" +
+					// beta);
 					cutsCounter++;
 					return beta;
 				}
@@ -201,7 +204,7 @@ public class MinMax {
 			return beta;
 		}
 	}
-	
+
 	private int alphaBeta(Node node, int alpha, int beta, boolean maximizing) {
 		goodAbCounter++;
 		if (node.getChildren().isEmpty()) {
